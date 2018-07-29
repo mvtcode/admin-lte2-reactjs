@@ -3,7 +3,8 @@ import { Route } from "react-router-dom";
 
 import Login from "./components/Login";
 import Layout from './components/Layout';
-import NotFound from './components/NotFound';
+import NotFound from './status/404';
+// import Unauthorized from './status/401';
 
 const map = {
 	'/login': Login,
@@ -14,23 +15,19 @@ const map = {
 class ReactRouter extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			path: window.location.pathname
-		};
+		this.state = {};
 	}
 
 	render() {
 		const page = map[window.location.pathname]? map[window.location.pathname]: NotFound;
-
 		return (
 			<React.Fragment>
-				{/*<Route exact path="/login" component={Login} />
-				<Route exact={['/login', '/forgot', '/register'].includes(window.location.pathname)} path="/" component={Layout} />
-				<Route component={NotFound} />*/}
 				<Route component={page} />
 			</React.Fragment>
 		);
 	}
+
+
 }
 
 export default ReactRouter;

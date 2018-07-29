@@ -1,9 +1,36 @@
 import React, { Component } from "react";
+import {connect} from "react-redux";
 import { NavLink } from "react-router-dom";
+import {userType, setUser} from "../actions";
 
 import '../assets/css/login.css';
 
-export default class Login extends Component {
+class Login extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			email: '',
+			password: ''
+		};
+		this.onSubmit = this.onSubmit.bind(this);
+		this.handleChange = this.handleChange.bind(this);
+	}
+
+	handleChange(e) {
+		this.setState({[e.target.name]: e.target.value})
+	}
+
+	onSubmit(event) {
+	  event.preventDefault();
+		this.props.setUser({
+      email: this.state.email,
+      password: this.state.password,
+      remember: false
+    });
+		console.log(this.state);
+    this.props.history.push("/");
+  }
+
   render() {
     return (
       <React.Fragment>
@@ -13,20 +40,20 @@ export default class Login extends Component {
           </div>
           <div className="login-box-body">
             <p className="login-box-msg">Sign in to system</p>
-            <form method="post">
+            <form method="post" onSubmit={this.onSubmit}>
               <div className="form-group has-feedback">
-                <input type="email" className="form-control" placeholder="Email"/>
+                <input name="email" onChange={e => this.handleChange(e)} type="email" className="form-control" placeholder="Email"/>
                 <span className="glyphicon glyphicon-envelope form-control-feedback"></span>
               </div>
               <div className="form-group has-feedback">
-                <input type="password" className="form-control" placeholder="Password"/>
+                <input name="password" onChange={e => this.handleChange(e)} type="password" className="form-control" placeholder="Password"/>
                 <span className="glyphicon glyphicon-lock form-control-feedback"></span>
               </div>
               <div className="row">
                 <div className="col-xs-8">
                   <div className="checkbox">
                     <label>
-                      <input type="checkbox"/> Remember Me
+                      <input name="remember" type="checkbox" onClick={e => this.handleChange(e)}/> Remember Me
                     </label>
                   </div>
                 </div>
@@ -51,4 +78,18 @@ export default class Login extends Component {
       </React.Fragment>
     );
   }
+
+  componentDidMount() {
+    console.log('getUser', this.props.getUser);
+  }
 }
+
+const mapState = state => ({
+  getUser: state.users
+});
+
+const mapDispatch = dispatch =>({
+  setUser: info => dispatch(setUser(info))
+});
+
+export default connect(mapState, mapDispatch)(Login);

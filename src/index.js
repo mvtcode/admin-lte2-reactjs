@@ -1,13 +1,19 @@
+/**
+ * Created by tanmv on 29/07/2018.
+ */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {BrowserRouter}  from 'react-router-dom';
+import App from './App';
+// import registerServiceWorker from './registerServiceWorker';
+import {createStore} from "redux";
+import rootStores from "./reducers";
+import {Provider} from "react-redux";
 
-import Routers from './Routers';
-
-// import 'bootstrap/dist/css/bootstrap.min.css';
-// import './assets/css/style.css';
+const stores = createStore(rootStores);
 
 ReactDOM.render(
-<BrowserRouter>
-	<Routers/>
-</BrowserRouter>, document.getElementById('root'));
+	<Provider store = { stores }>
+		<App/>
+	</Provider>,
+	document.getElementById('root'));
+// registerServiceWorker();

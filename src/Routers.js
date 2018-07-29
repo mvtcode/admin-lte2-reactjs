@@ -9,7 +9,7 @@ class ReactRouter extends React.Component {
 		return (
 			<React.Fragment>
 				<Route exact path="/login" component={Login} />
-				<Route path="/" component={Layout} />
+				<Route exact={window.location.pathname === '/login'} path="/" component={Layout} />
 			</React.Fragment>
 		);
 	}

@@ -1,13 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {BrowserRouter as Router}  from 'react-router-dom';
+import {BrowserRouter}  from 'react-router-dom';
 
-import ReactRouter from './Routers';
+import Routers from './Routers';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './assets/css/index.css';
 
 ReactDOM.render(
-<Router>
-	<ReactRouter/>
-</Router>, document.getElementById('root'));
+<BrowserRouter>
+	<Routers/>
+</BrowserRouter>, document.getElementById('root'));

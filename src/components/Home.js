@@ -1,20 +1,31 @@
 import React, { Component } from "react";
 import {connect} from "react-redux";
 import {userType, setUser} from "../actions";
+import users from "../reducers/users";
 
 class Home extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			user_info: this.props.getUser
+		};
+	}
+
 	render() {
 		return (
 			<div style={{ textAlign: "center", marginTop: "10rem" }}>
-				<h1>App is there</h1>
-				{this.props.getUser}
+				<h1>App is there {this.state.user_info.email}</h1>
 			</div>
 		);
+	}
+
+	componentDidMount() {
+		console.log('getUser', this.props.getUser);
 	}
 }
 
 const mapState = state => ({
-	getUser: state.users
+	getUser: users(state.info, userType.GET_USER)
 });
 
 const mapDispatch = dispatch =>({

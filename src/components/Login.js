@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import {connect} from "react-redux";
 import { NavLink } from "react-router-dom";
 import {userType, setUser} from "../actions";
+import users from "../reducers/users";
 
 import '../assets/css/login.css';
 
@@ -10,7 +11,8 @@ class Login extends Component {
 		super(props);
 		this.state = {
 			email: '',
-			password: ''
+			password: '',
+      remember: ''
 		};
 		this.onSubmit = this.onSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
@@ -25,9 +27,8 @@ class Login extends Component {
 		this.props.setUser({
       email: this.state.email,
       password: this.state.password,
-      remember: false
+      remember: this.state.remember
     });
-		console.log(this.state);
     this.props.history.push("/");
   }
 
@@ -85,7 +86,7 @@ class Login extends Component {
 }
 
 const mapState = state => ({
-  getUser: state.users
+  getUser: users(state.info, userType.GET_USER)
 });
 
 const mapDispatch = dispatch =>({

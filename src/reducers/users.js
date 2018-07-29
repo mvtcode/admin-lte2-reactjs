@@ -8,12 +8,11 @@ let user = {};
 const users = (state = user, action) =>{
 	switch (action.type){
 		case userType.SET_USER:
-			return {
-				...state,
-				info: action.info
-			};
+			state.info = action.info;
+			return state;
 			break;
 		case userType.GET_USER:
+			console.log('bbbbbbbb');
 			return state.info;
 			break;
 		default: return state;

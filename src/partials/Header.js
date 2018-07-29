@@ -132,9 +132,9 @@ class Header extends Component {
                   </li>
                 </ul>
               </li>
-              <li>
+              {/*<li>
                 <a href="#" data-toggle="control-sidebar"><i className="fa fa-gears"></i></a>
-              </li>
+              </li>*/}
             </ul>
           </div>
         </nav>

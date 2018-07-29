@@ -4,8 +4,8 @@ import {BrowserRouter}  from 'react-router-dom';
 
 import Routers from './Routers';
 
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './assets/css/index.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
+// import './assets/css/style.css';
 
 ReactDOM.render(
 <BrowserRouter>

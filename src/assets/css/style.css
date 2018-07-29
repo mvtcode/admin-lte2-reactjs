@@ -1,0 +1,11 @@
+body {
+	background: #fff !important;
+}
+
+.skin-blue .wrapper {
+	background: #fff !important;
+}
+
+#root {
+	min-height: calc(100vh) !important;
+}

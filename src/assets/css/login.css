@@ -1,0 +1,20 @@
+body {
+	background-color: #222d32;
+}
+
+.skin-blue .wrapper {
+	background-color: #222d32 !important;
+}
+
+.wrapper {
+	background-color: #222d32;
+}
+
+#root {
+	min-height: inherit;
+}
+
+.login-box {
+	background: #fff;
+	border: 1px solid #999;
+}

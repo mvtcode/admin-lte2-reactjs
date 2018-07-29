@@ -7,7 +7,7 @@ class Home extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			user_info: this.props.getUser
+			user_info: this.props.getUser.info? this.props.getUser.info: {}
 		};
 	}
 

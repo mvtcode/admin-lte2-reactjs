@@ -18,6 +18,10 @@ class ReactRouter extends React.Component {
 		this.state = {};
 	}
 
+	componentWillMount() {
+		// console.log('will mount');
+	}
+
 	render() {
 		const page = map[window.location.pathname]? map[window.location.pathname]: NotFound;
 		return (
@@ -26,8 +30,6 @@ class ReactRouter extends React.Component {
 			</React.Fragment>
 		);
 	}
-
-
 }
 
 export default ReactRouter;

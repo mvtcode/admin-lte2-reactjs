@@ -12,7 +12,6 @@ const users = (state = user, action) =>{
 			return state;
 			break;
 		case userType.GET_USER:
-			console.log('bbbbbbbb');
 			return state.info;
 			break;
 		default: return state;

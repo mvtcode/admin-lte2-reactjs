@@ -9,3 +9,10 @@ body {
 #root {
 	min-height: calc(100vh) !important;
 }
+
+.pagination {
+	margin: 0;
+	padding: 0;
+	text-align: right;
+	float: right;
+}

@@ -10,10 +10,8 @@ const pages = (state = page, action) =>{
 		case pageType.SET_PAGE:
 			state.info = action.info;
 			return state;
-			break;
 		case pageType.GET_PAGE:
 			return state.info;
-			break;
 		default: return state;
 	}
 };

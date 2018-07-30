@@ -26,7 +26,7 @@ class Layout extends Component {
 		stores.subscribe(() => {
 			const storeState = stores.getState();
 			this.setState(storeState.pages.info);
-			document.title = this.state.title;
+			document.title = storeState.pages.info.title;
 		});
 	}
 

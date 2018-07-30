@@ -31,7 +31,7 @@ class Sidebar extends Component {
 			<aside className="main-sidebar">
 				<section className="sidebar">
 					<ul className="sidebar-menu" data-widget="tree">
-						<li className="header">Main menu</li>
+						<li className="header">&nbsp;</li>
 						<li>
 							<NavLink to="/" isActive={this.active}><i className="fa fa-dashboard"></i> <span>Dashboard</span></NavLink>
 						</li>

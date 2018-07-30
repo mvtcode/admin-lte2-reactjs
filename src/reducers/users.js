@@ -10,10 +10,8 @@ const users = (state = user, action) =>{
 		case userType.SET_USER:
 			state.info = action.info;
 			return state;
-			break;
 		case userType.GET_USER:
 			return state.info;
-			break;
 		default: return state;
 	}
 };

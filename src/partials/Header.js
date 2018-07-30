@@ -24,18 +24,18 @@ class Header extends Component {
   render() {
     return (
       <header className="main-header">
-        <a href="/" className="logo">
+        <NavLink to="/" className="logo">
           <span className="logo-mini">VAFA</span>
           <span className="logo-lg"><b>VAFA</b> Videos</span>
-        </a>
+        </NavLink>
 
         <nav className="navbar navbar-static-top" role="navigation">
-          <a href="#" className="sidebar-toggle" data-toggle="push-menu" role="button">
+          <NavLink to="/" className="sidebar-toggle" data-toggle="push-menu" role="button">
             <span className="sr-only">Toggle navigation</span>
-          </a>
+          </NavLink>
           <div className="navbar-custom-menu">
             <ul className="nav navbar-nav">
-              <li className="dropdown messages-menu">
+	            {/*<li className="dropdown messages-menu">
                 <a href="#" className="dropdown-toggle" data-toggle="dropdown">
                   <i className="fa fa-envelope-o"></i>
                   <span className="label label-success">4</span>
@@ -110,15 +110,15 @@ class Header extends Component {
                     <a href="#">View all tasks</a>
                   </li>
                 </ul>
-              </li>
+              </li>*/}
               <li className="dropdown user user-menu">
-                <a href="#" className="dropdown-toggle" data-toggle="dropdown">
-                  <img src="dist/img/user2-160x160.jpg" className="user-image" alt="User Image"/>
-                    <span className="hidden-xs">{this.state.user.email}</span>
-                </a>
+                <NavLink to="/" className="dropdown-toggle" data-toggle="dropdown">
+                  <img src="/dist/img/avatar.jpg" className="user-image" alt="avatar"/>
+	                <span className="hidden-xs">{this.state.user.email}</span>
+                </NavLink>
                 <ul className="dropdown-menu">
                   <li className="user-header">
-                    <img src="dist/img/user2-160x160.jpg" className="img-circle" alt="User Image"/>
+                    <img src="/dist/img/avatar.jpg" className="img-circle" alt="avatar"/>
                       <p>
                         Alexander Pierce - Web Developer
                         <small>Member since Nov. 2012</small>
@@ -127,22 +127,22 @@ class Header extends Component {
                   <li className="user-body">
                     <div className="row">
                       <div className="col-xs-4 text-center">
-                        <a href="#">Followers</a>
+                        <NavLink to="/">Followers</NavLink>
                       </div>
                       <div className="col-xs-4 text-center">
-                        <a href="#">Sales</a>
+                        <NavLink to="/">Sales</NavLink>
                       </div>
                       <div className="col-xs-4 text-center">
-                        <a href="#">Friends</a>
+                        <NavLink to="/">Friends</NavLink>
                       </div>
                     </div>
                   </li>
                   <li className="user-footer">
                     <div className="pull-left">
-                      <a href="#" className="btn btn-default btn-flat">Profile</a>
+                      <NavLink to="/profile" className="btn btn-default btn-flat">Profile</NavLink>
                     </div>
                     <div className="pull-right">
-                      <a href="#" className="btn btn-default btn-flat">Sign out</a>
+                      <NavLink to="/logout" className="btn btn-default btn-flat">Sign out</NavLink>
                     </div>
                   </li>
                 </ul>

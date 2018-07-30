@@ -1,10 +1,25 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
+import stores from '../stores';
 
 class Header extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			user: {}
+		};
+	}
+
+	componentWillMount() {
+		const storeState = stores.getState();
+		let state = this.state;
+		state.user = storeState.users.info || {email: 'admin'};
+		this.setState(state);
+	}
+
 	progress_bar = {
-	  width: "20%"
-  };
+		width: "20%"
+	};
 
   render() {
     return (
@@ -99,7 +114,7 @@ class Header extends Component {
               <li className="dropdown user user-menu">
                 <a href="#" className="dropdown-toggle" data-toggle="dropdown">
                   <img src="dist/img/user2-160x160.jpg" className="user-image" alt="User Image"/>
-                    <span className="hidden-xs">Alexander Pierce</span>
+                    <span className="hidden-xs">{this.state.user.email}</span>
                 </a>
                 <ul className="dropdown-menu">
                   <li className="user-header">

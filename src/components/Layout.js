@@ -9,10 +9,27 @@ import Header from "../partials/Header";
 import Sidebar from "../partials/Sidebar";
 import Home from "./Home";
 import Videos from "./Videos";
-
+import stores from '../stores';
 import '../assets/css/style.css';
 
 class Layout extends Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			title: '',
+			name: '',
+			description: ''
+		};
+	}
+
+	componentWillMount() {
+		stores.subscribe(() => {
+			const storeState = stores.getState();
+			this.setState(storeState.pages.info);
+			document.title = this.state.title;
+		});
+	}
+
 	render() {
 		return (
 			<React.Fragment>
@@ -20,13 +37,8 @@ class Layout extends Component {
 				<Sidebar />
 				<div className="content-wrapper">
 					<section className="content-header">
-						<h1> Trang chu <small>Optional description</small></h1>
-						{/*<ol className="breadcrumb">
-							<li><a href="#"><i className="fa fa-dashboard"></i> Level</a></li>
-							<li className="active">Here</li>
-						</ol>*/}
+						<h1> {this.state.name} <small>{this.state.description}</small></h1>
 					</section>
-
 					<section className="content container-fluid">
 						<Route exact path="/" component={Home} />
 						<Route exact path="/videos" component={Videos} />

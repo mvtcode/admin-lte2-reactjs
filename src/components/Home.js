@@ -1,14 +1,24 @@
 import React, { Component } from "react";
-import {connect} from "react-redux";
-import {userType, setUser} from "../actions";
-import users from "../reducers/users";
+import {pageType} from "../actions";
+import stores from '../stores';
 
 class Home extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			user_info: this.props.getUser.info? this.props.getUser.info: {}
+			user_info: stores.getState().users
 		};
+	}
+
+	componentWillMount() {
+		stores.dispatch({
+			type: pageType.SET_PAGE,
+			info: {
+				title: 'Dashboard',
+				name: 'Dashboard',
+				description: ''
+			}
+		});
 	}
 
 	render() {
@@ -20,16 +30,7 @@ class Home extends Component {
 	}
 
 	componentDidMount() {
-		console.log('getUser', this.props.getUser);
+		//
 	}
 }
-
-const mapState = state => ({
-	getUser: users(state.info, userType.GET_USER)
-});
-
-const mapDispatch = dispatch =>({
-	setUser: info => dispatch(setUser(info))
-});
-
-export default connect(mapState, mapDispatch)(Home);
+export default Home;

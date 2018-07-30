@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import {connect} from "react-redux";
 import { NavLink } from "react-router-dom";
-import {userType, setUser} from "../actions";
-import users from "../reducers/users";
+import {userType} from '../actions';
+import stores from '../stores';
 
 import '../assets/css/login.css';
 
@@ -12,7 +11,7 @@ class Login extends Component {
 		this.state = {
 			email: '',
 			password: '',
-      remember: ''
+			remember: ''
 		};
 		this.onSubmit = this.onSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
@@ -23,14 +22,17 @@ class Login extends Component {
 	}
 
 	onSubmit(event) {
-	  event.preventDefault();
-		this.props.setUser({
-      email: this.state.email,
-      password: this.state.password,
-      remember: this.state.remember
-    });
-    this.props.history.push("/");
-  }
+		event.preventDefault();
+		stores.dispatch({
+			type: userType.SET_USER,
+			info: {
+				email: this.state.email,
+				password: this.state.password,
+				remember: this.state.remember
+			}
+		});
+		this.props.history.push("/");
+	}
 
   render() {
     return (
@@ -80,17 +82,9 @@ class Login extends Component {
     );
   }
 
-  componentDidMount() {
-    console.log('getUser', this.props.getUser);
-  }
+	componentDidMount() {
+		//
+	}
 }
 
-const mapState = state => ({
-  getUser: users(state.info, userType.GET_USER)
-});
-
-const mapDispatch = dispatch =>({
-  setUser: info => dispatch(setUser(info))
-});
-
-export default connect(mapState, mapDispatch)(Login);
+export default Login;

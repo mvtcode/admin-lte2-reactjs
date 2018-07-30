@@ -7,8 +7,8 @@ import { Route } from "react-router-dom";
 
 import Header from "../partials/Header";
 import Sidebar from "../partials/Sidebar";
-import Home from "./Home";
-import Videos from "./Videos";
+import Home from "./home/index";
+import Videos from "./videos/index";
 import stores from '../stores';
 import '../assets/css/style.css';
 

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import {pageType} from "../actions";
-import stores from '../stores';
+import {pageType} from "../../actions";
+import stores from '../../stores';
 
 class Home extends Component {
 	constructor(props) {

@@ -44,6 +44,10 @@ class Videos extends Component {
 		this.modal.current.showModal();
 	};
 
+	save(data) {
+		console.log(data);
+	};
+
 	render() {
 		return (
 			<React.Fragment>
@@ -134,7 +138,7 @@ class Videos extends Component {
 					</div>
 				</div>
 
-				<Modal ref={this.modal} />
+				<Modal ref={this.modal} onChange={this.save} />
 			</React.Fragment>
 		);
 	}

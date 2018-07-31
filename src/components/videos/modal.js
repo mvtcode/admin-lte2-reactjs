@@ -34,7 +34,12 @@ class VideoModal extends Component {
 	};
 
 	saveAndClose() {
-		console.log('save');
+		if (typeof this.props.onChange === 'function') {
+			this.props.onChange({
+				a: 1,
+				b: 2
+			});
+		}
 		this.closeModal();
 	}
 

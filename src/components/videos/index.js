@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import Pagination from "react-js-pagination";
-import $ from 'jquery';
 import {pageType} from "../../actions";
 import stores from '../../stores';
-import Modal from 'react-bootstrap-modal';
+import Modal from './modal';
 
 class Videos extends Component {
 	constructor(props) {
@@ -11,8 +10,6 @@ class Videos extends Component {
 
 		this.handlePageChanged = this.handlePageChanged.bind(this);
 		this.showModal = this.showModal.bind(this);
-		this.closeModal = this.closeModal.bind(this);
-		this.saveAndClose = this.saveAndClose.bind(this);
 
 		this.state = {
 			page: {
@@ -20,11 +17,10 @@ class Videos extends Component {
 				page_size: 20,
 				page_index: 1,
 				visiblePage: 5
-			},
-			modal: {
-				isShow: false
 			}
 		};
+
+		this.modal = React.createRef();
 	}
 
 	componentWillMount() {
@@ -45,24 +41,8 @@ class Videos extends Component {
 	}
 
 	showModal() {
-		let state = this.state;
-		state.modal.isShow = true;
-		this.setState(state);
-		setTimeout(() => {
-			$('.modal').css({display: 'block', 'padding-right': '15px'});
-		}, 100);
+		this.modal.current.showModal();
 	};
-
-	closeModal() {
-		let state = this.state;
-		state.modal.isShow = false;
-		this.setState(state);
-	};
-
-	saveAndClose() {
-		console.log('save');
-		this.closeModal();
-	}
 
 	render() {
 		return (
@@ -154,24 +134,7 @@ class Videos extends Component {
 					</div>
 				</div>
 
-				<Modal
-					show={this.state.modal.isShow}
-					onHide={this.closeModal}
-					aria-labelledby="ModalHeader"
-				>
-					<Modal.Header closeButton>
-						<Modal.Title id='ModalHeader'>A Title Goes here</Modal.Title>
-					</Modal.Header>
-					<Modal.Body>
-						<p>Some Content here</p>
-					</Modal.Body>
-					<Modal.Footer>
-						<button className='btn btn-primary' onClick={this.saveAndClose}>
-							Save
-						</button>
-						<Modal.Dismiss className='btn btn-default'>Cancel</Modal.Dismiss>
-					</Modal.Footer>
-				</Modal>
+				<Modal ref={this.modal} />
 			</React.Fragment>
 		);
 	}

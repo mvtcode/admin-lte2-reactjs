@@ -1,6 +1,11 @@
 # admin-lte2-reactjs
 
-**Web application with**
+**Feature**
+
+Admin lte2 as web application. 
+
+## module
+
 - React
 - React-router
 - Redux
@@ -9,10 +14,12 @@
 
 **Install**
 - npm i
-- boser i
+- bower i
 
 **Start**
 - npm start
+
+Application start **[http://127.0.0.1:3000](http://127.0.0.1:3000)**.
 
 **Build**
 - npm run build

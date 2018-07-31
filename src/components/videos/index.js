@@ -159,14 +159,14 @@ class Videos extends Component {
 	}
 
 	edit(info, index) {
-		//
+		this.modal.current.showModal(info);
 	}
 
 	remove(info, index) {
 		const self = this;
 		this.modalConfirm.current.showModal({
 			title: 'Confirm delete',
-			content: 'Are your want delete this video?',
+			content: `Are your want delete video "${info.name}"?`,
 			callback: (result) => {
 				if(result) {
 					self.state.list.splice(index, 1);

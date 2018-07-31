@@ -14,7 +14,8 @@ class VideoModal extends Component {
 		super(props);
 
 		this.state = {
-			isShow: false
+			isShow: false,
+			info: {}
 		};
 
 		this.showModal = this.showModal.bind(this);
@@ -22,8 +23,8 @@ class VideoModal extends Component {
 		this.saveAndClose = this.saveAndClose.bind(this);
 	}
 
-	showModal() {
-		this.setState({isShow: true});
+	showModal(info) {
+		this.setState({isShow: true, info});
 		setTimeout(() => {
 			$('.modal').css({display: 'block', 'padding-right': '15px'});
 		}, 100);

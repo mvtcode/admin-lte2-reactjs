@@ -2,7 +2,7 @@
 
 **Feature**
 
-Admin lte2 as web application. 
+Admin lte2 as a web application. 
 
 ## module
 
@@ -23,3 +23,9 @@ Application start **[http://127.0.0.1:3000](http://127.0.0.1:3000)**.
 
 **Build**
 - npm run build
+
+## Author
+
+Email: [macvantan@gmail.com](mailto:macvantan@gmail.com)
+
+Fb: [fb/mvt.hp.star](https://www.facebook.com/mvt.hp.star)

@@ -1,13 +1,18 @@
 import React, { Component } from "react";
 import Pagination from "react-js-pagination";
+import $ from 'jquery';
 import {pageType} from "../../actions";
 import stores from '../../stores';
+import Modal from 'react-bootstrap-modal';
 
 class Videos extends Component {
 	constructor(props) {
 		super(props);
 
 		this.handlePageChanged = this.handlePageChanged.bind(this);
+		this.showModal = this.showModal.bind(this);
+		this.closeModal = this.closeModal.bind(this);
+		this.saveAndClose = this.saveAndClose.bind(this);
 
 		this.state = {
 			page: {
@@ -15,6 +20,9 @@ class Videos extends Component {
 				page_size: 20,
 				page_index: 1,
 				visiblePage: 5
+			},
+			modal: {
+				isShow: false
 			}
 		};
 	}
@@ -34,6 +42,26 @@ class Videos extends Component {
 		const state = this.state;
 		state.page.page_index = newPage;
 		this.setState(state);
+	}
+
+	showModal() {
+		let state = this.state;
+		state.modal.isShow = true;
+		this.setState(state);
+		setTimeout(() => {
+			$('.modal').css({display: 'block', 'padding-right': '15px'});
+		}, 100);
+	};
+
+	closeModal() {
+		let state = this.state;
+		state.modal.isShow = false;
+		this.setState(state);
+	};
+
+	saveAndClose() {
+		console.log('save');
+		this.closeModal();
 	}
 
 	render() {
@@ -113,9 +141,37 @@ class Videos extends Component {
 
 								</div>
 							</div>
+
+							<div className="box-footer">
+								<div className="row">
+									<div className="col-xs-12 text-center">
+										<button onClick={this.showModal} className="btn btn-primary" type="button"><i className="fa fa-plus"></i> Add</button>
+									</div>
+								</div>
+							</div>
+
 						</div>
 					</div>
 				</div>
+
+				<Modal
+					show={this.state.modal.isShow}
+					onHide={this.closeModal}
+					aria-labelledby="ModalHeader"
+				>
+					<Modal.Header closeButton>
+						<Modal.Title id='ModalHeader'>A Title Goes here</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>
+						<p>Some Content here</p>
+					</Modal.Body>
+					<Modal.Footer>
+						<button className='btn btn-primary' onClick={this.saveAndClose}>
+							Save
+						</button>
+						<Modal.Dismiss className='btn btn-default'>Cancel</Modal.Dismiss>
+					</Modal.Footer>
+				</Modal>
 			</React.Fragment>
 		);
 	}

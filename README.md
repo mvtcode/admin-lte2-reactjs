@@ -4,7 +4,7 @@
 
 Admin lte2 as a web application. 
 
-## module
+**Module**
 
 - React
 - React-router

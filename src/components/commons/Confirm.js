@@ -15,7 +15,12 @@ class Confirm extends Component {
 		super(props);
 
 		this.state = {
-			isShow: false
+			title: '',
+			content: '',
+			btOk: '',
+			btCancel: '',
+			isShow: false,
+			callback: null
 		};
 
 		this.showModal = this.showModal.bind(this);
@@ -23,8 +28,15 @@ class Confirm extends Component {
 		this.confirm = this.confirm.bind(this);
 	}
 
-	showModal() {
-		this.setState({isShow: true});
+	showModal({title, content, btOk, btCancel, callback}) {
+		this.setState({
+			isShow: true,
+			title: title || 'Confirm',
+			content: content || 'Contents',
+			btOk: btOk || 'Ok',
+			btCancel: btCancel || 'Cancel',
+			callback
+		});
 		setTimeout(() => {
 			$('.modal').css({display: 'block', 'padding-right': '15px'});
 		}, 100);
@@ -42,6 +54,9 @@ class Confirm extends Component {
 		if (typeof this.props.onConfirm === 'function') {
 			this.props.onConfirm(b);
 		}
+		if (typeof this.state.callback === 'function') {
+			this.state.callback(b);
+		}
 	};
 
 	render() {
@@ -53,17 +68,17 @@ class Confirm extends Component {
 					aria-labelledby="ModalHeader"
 				>
 					<Modal.Header closeButton>
-						<Modal.Title id='ModalHeader'>{this.props.title || 'Confirm'}</Modal.Title>
+						<Modal.Title id='ModalHeader'>{this.state.title}</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
-						<p>{this.props.content || 'content'}</p>
+						<p>{this.state.content}</p>
 					</Modal.Body>
 					<Modal.Footer>
-						<button className='btn btn-primary' onClick={this.confirm(true)}>
-							{this.props.btOk || 'Ok'}
+						<button className='btn btn-primary' onClick={() => this.confirm(true)}>
+							{this.state.btOk}
 						</button>
-						<button className='btn btn-default' onClick={this.confirm(false)}>
-							{this.props.btCancel || 'Cancel'}
+						<button className='btn btn-default' onClick={() => this.confirm(false)}>
+							{this.state.btCancel}
 						</button>
 						{/*<Modal.Dismiss className='btn btn-default'>{this.props.btCancel || 'Cancel'}</Modal.Dismiss>*/}
 					</Modal.Footer>

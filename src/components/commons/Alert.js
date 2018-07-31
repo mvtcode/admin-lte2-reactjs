@@ -22,15 +22,25 @@ class Alert extends Component {
 		super(props);
 
 		this.state = {
-			isShow: false
+			title: '',
+			content: '',
+			btOk: '',
+			isShow: false,
+			callback: null
 		};
 
 		this.showModal = this.showModal.bind(this);
 		this.closeModal = this.closeModal.bind(this);
 	}
 
-	showModal() {
-		this.setState({isShow: true});
+	showModal({title, content, btOk, btCancel, callback}) {
+		this.setState({
+			isShow: true,
+			title: title || 'Alert',
+			content: content || 'Contents',
+			btOk: btOk || 'Ok',
+			callback
+		});
 		setTimeout(() => {
 			$('.modal').css({display: 'block', 'padding-right': '15px'});
 		}, 100);
@@ -52,13 +62,13 @@ class Alert extends Component {
 					aria-labelledby="ModalHeader"
 				>
 					<Modal.Header closeButton>
-						<Modal.Title id='ModalHeader'>{this.props.title || 'Alert'}</Modal.Title>
+						<Modal.Title id='ModalHeader'>{this.state.title}</Modal.Title>
 					</Modal.Header>
 					<Modal.Body>
-						<p>{this.props.content || 'content'}</p>
+						<p>{this.state.content}</p>
 					</Modal.Body>
 					<Modal.Footer>
-						<Modal.Dismiss className='btn btn-default'>{this.props.btOk || 'Ok'}</Modal.Dismiss>
+						<Modal.Dismiss className='btn btn-primary'>{this.state.btOk}</Modal.Dismiss>
 					</Modal.Footer>
 				</Modal>
 			</React.Fragment>

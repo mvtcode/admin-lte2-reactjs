@@ -15,6 +15,7 @@ class Videos extends Component {
 		this.showModal = this.showModal.bind(this);
 		this.edit = this.edit.bind(this);
 		this.remove = this.remove.bind(this);
+		this.save = this.save.bind(this);
 
 		this.state = {
 			page: {
@@ -42,20 +43,6 @@ class Videos extends Component {
 		});
 	}
 
-	handlePageChanged(newPage) {
-		const state = this.state;
-		state.page.page_index = newPage;
-		this.setState(state);
-	}
-
-	showModal() {
-		this.modal.current.showModal();
-	};
-
-	save(data) {
-		console.log(data);
-	};
-
 	render() {
 		return (
 			<React.Fragment>
@@ -72,12 +59,12 @@ class Videos extends Component {
 											<table className="table table-bordered table-striped">
 												<thead>
 												<tr>
-													<th>No.</th>
+													<th className="text-center">No.</th>
 													<th>Name</th>
 													<th>Type</th>
 													<th>key</th>
 													<th>Description</th>
-													<th>Action</th>
+													<th className="text-center">Action</th>
 												</tr>
 												</thead>
 												<tbody>
@@ -85,12 +72,12 @@ class Videos extends Component {
 													this.state.list.map((_info, index) => {
 														return (
 															<tr key={index}>
-																<td>{index + 1}</td>
+																<td className="text-center">{index + 1}</td>
 																<td>{_info.name}</td>
 																<td>{_info.key}</td>
 																<td>{_info.type}</td>
 																<td>{_info.description}</td>
-																<td>
+																<td className="text-center">
 																	<a href="javascript:void(0)" onClick={() => this.edit(_info, index)}>Edit</a> | <a href="javascript:void(0)" onClick={() => this.remove(_info, index)}>Delete</a>
 																</td>
 															</tr>
@@ -127,7 +114,7 @@ class Videos extends Component {
 							<div className="box-footer">
 								<div className="row">
 									<div className="col-xs-12 text-center">
-										<button onClick={this.showModal} className="btn btn-primary" type="button"><i className="fa fa-plus"></i> Add</button>
+										<button onClick={() => this.showModal(null)} className="btn btn-primary" type="button"><i className="fa fa-plus"></i> Add</button>
 									</div>
 								</div>
 							</div>
@@ -136,7 +123,7 @@ class Videos extends Component {
 					</div>
 				</div>
 
-				<Modal ref={this.modal} onChange={this.save} />
+				<Modal ref={this.modal} onSave={this.save} />
 				<Confirm ref={this.modalConfirm}/>
 				<Alert ref={this.modalAlert}/>
 			</React.Fragment>
@@ -174,8 +161,44 @@ class Videos extends Component {
 		}
 	}
 
+	showModal(info, index) {
+		this.modal.current.show(info, index);
+	};
+
+	handlePageChanged(newPage) {
+		this.state.page.page_index = newPage;
+		this.setState(this.state);
+	}
+
+	async save(info, index) {
+		try {
+			if(info._id) {
+				const res = await videoService.update(info);
+				if(res.error === 0) {
+					this.state.list[index] = info;
+					this.setState(this.state);
+					this.setState(this.state);
+					this.modal.current.close();
+				} else {
+					this.modal.current.setMessage(res.message);
+				}
+			} else {
+				const res = await videoService.add(info);
+				if(res.error === 0) {
+					this.state.list.push(res.info);
+					this.setState(this.state);
+					this.modal.current.close();
+				} else {
+					this.modal.current.setMessage(res.message);
+				}
+			}
+		} catch (e) {
+			console.error('Save', e);
+		}
+	};
+
 	edit(info, index) {
-		this.modal.current.showModal(info);
+		this.showModal(info, index);
 	}
 
 	remove(info, index) {
@@ -183,14 +206,18 @@ class Videos extends Component {
 		this.modalConfirm.current.showModal({
 			title: 'Confirm delete',
 			content: `Are your want delete video "${info.name}"?`,
-			callback: (result) => {
+			callback: async (result) => {
 				if(result) {
-					self.state.list.splice(index, 1);
-					self.setState(self.state);
-					self.modalAlert.current.showModal({
-						title: 'Deleted',
-						content: 'The video has deleted'
-					});
+					const res = await videoService.remove(info._id);
+					if(res.error === 0) {
+						self.state.list.splice(index, 1);
+						self.setState(self.state);
+					} else {
+						self.modalAlert.current.showModal({
+							title: 'Error',
+							content: res.message
+						});
+					}
 				}
 			}
 		});

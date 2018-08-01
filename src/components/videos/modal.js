@@ -9,43 +9,53 @@ import $ from 'jquery';
 import React, { Component } from "react";
 import Modal from 'react-bootstrap-modal';
 
+const infoInit = {
+	_id: '',
+	name: '',
+	description: '',
+	type: 'youtube',
+	key: '',
+	path: '',
+	file: ''
+};
+
 class VideoModal extends Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
 			isShow: false,
-			info: {
-				_id: '',
-				name: '',
-				description: '',
-				type: '',
-				key: '',
-				path: '',
-				file: ''
-			}
+			message: '',
+			index: 0,
+			info: {}
 		};
 
-		this.showModal = this.showModal.bind(this);
-		this.closeModal = this.closeModal.bind(this);
-		this.saveAndClose = this.saveAndClose.bind(this);
+		this.show = this.show.bind(this);
+		this.close = this.close.bind(this);
+		this.save = this.save.bind(this);
 		this.handleChange = this.handleChange.bind(this);
 	}
 
-	showModal(info) {
-		this.setState({isShow: true, info: info? info: {} });
+	show(info, index) {
+		this.setState({isShow: true, index, message: '', info: info? info: Object.assign({}, infoInit) });
 		setTimeout(() => {
 			$('.modal').css({display: 'block', 'padding-right': '15px'});
 		}, 100);
 	};
 
-	closeModal() {
-		this.setState({isShow: false});
+	close() {
+		this.state.isShow = false;
+		this.setState(this.state);
 	};
 
-	saveAndClose() {
-		if (typeof this.props.onChange === 'function') {
-			this.props.onChange(this.state.info);
+	setMessage(message) {
+		this.state.message = message;
+		this.setState(this.state);
+	};
+
+	save() {
+		if (typeof this.props.onSave === 'function') {
+			this.props.onSave(this.state.info, this.state.index);
 		}
 	}
 
@@ -57,7 +67,7 @@ class VideoModal extends Component {
 	render() {
 		return (
 			<React.Fragment>
-				<Modal show={this.state.isShow} onHide={this.closeModal} aria-labelledby="ModalHeader">
+				<Modal show={this.state.isShow} onHide={this.close} aria-labelledby="ModalHeader">
 					<Modal.Header closeButton>
 						<Modal.Title id='ModalHeader'>{this.state.info._id? 'Edit video': 'Add video'}</Modal.Title>
 					</Modal.Header>
@@ -78,7 +88,7 @@ class VideoModal extends Component {
 							<div className="form-group">
 								<label className="col-sm-3 control-label">Video type:</label>
 								<div className="col-sm-9">
-									<select value={this.state.info.type} onChange={(event) => this.handleChange('type', event)} className="form-control" style={{fontWeight: 'bold'}}>
+									<select onChange={(event) => this.handleChange('type', event)} className="form-control" style={{fontWeight: 'bold'}}>
 										<option value="youtube">Youtube</option>
 										<option disabled value="file">File</option>
 									</select>
@@ -93,16 +103,23 @@ class VideoModal extends Component {
 							<div className="form-group">
 								<label className="col-sm-3 control-label">Description:</label>
 								<div className="col-sm-9">
-									<textarea onChange={(event) => this.handleChange('description', event)} rows="3" className="form-control" placeholder="Video description" required>{this.state.description}</textarea>
+									<textarea value={this.state.info.description} onChange={(event) => this.handleChange('description', event)} rows="3" className="form-control" placeholder="Video description" required></textarea>
 								</div>
 							</div>
 						</form>
 					</Modal.Body>
 					<Modal.Footer>
-						<button className='btn btn-primary' onClick={this.saveAndClose}>
-							Save
-						</button>
-						<Modal.Dismiss className='btn btn-default'>Cancel</Modal.Dismiss>
+						<div className="row">
+							<div className="col-sm-7">
+								{this.state.message}
+							</div>
+							<div className="col-sm-5">
+								<button className='btn btn-primary' onClick={this.save}>
+									Save
+								</button>
+								<Modal.Dismiss className='btn btn-default'>Cancel</Modal.Dismiss>
+							</div>
+						</div>
 					</Modal.Footer>
 				</Modal>
 			</React.Fragment>

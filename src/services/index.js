@@ -22,9 +22,9 @@ export const Post = async (url, params = {}) => {
 };
 
 export const Put = async (url, params = {}) => {
-	return await axios.post(url, params);
+	return await axios.put(url, params);
 };
 
 export const Delete = async (url) => {
-	return await axios.post(url);
+	return await axios.delete(url);
 };

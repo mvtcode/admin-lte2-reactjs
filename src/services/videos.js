@@ -8,8 +8,8 @@
 
 import {Get, Post, Put, Delete} from './index';
 
-export const profile = async () => {
-	const results = await Get('/api/videos', {});
+export const list = async (params) => {
+	const results = await Get('/api/videos', {params});
 	return results.data;
 };
 

@@ -5,6 +5,7 @@ import stores from '../../stores';
 import Modal from './modal';
 import Confirm from '../commons/Confirm';
 import Alert from '../commons/Alert';
+import * as videoService from '../../services/videos';
 
 class Videos extends Component {
 	constructor(props) {
@@ -74,6 +75,7 @@ class Videos extends Component {
 													<th>No.</th>
 													<th>Name</th>
 													<th>Type</th>
+													<th>key</th>
 													<th>Description</th>
 													<th>Action</th>
 												</tr>
@@ -85,6 +87,7 @@ class Videos extends Component {
 															<tr key={index}>
 																<td>{index + 1}</td>
 																<td>{_info.name}</td>
+																<td>{_info.key}</td>
 																<td>{_info.type}</td>
 																<td>{_info.description}</td>
 																<td>
@@ -141,21 +144,34 @@ class Videos extends Component {
 	}
 
 	async componentDidMount() {
-		// ajax load data here
-		const list = [
-			{name: 'Chạy ngay đi', type: 1, description: 'Chuồn thôi', created_at: new Date()},
-			{name: 'Vì sao thế', type: 1, description: 'Vì ông hàng xóm', created_at: new Date()},
-			{name: 'Cô gái m52', type: 1, description: 'Chỉ cao 1m52', created_at: new Date()},
-			{name: 'Ngắm hoa lệ rơi', type: 1, description: 'Ngắm trăng', created_at: new Date()},
-			{name: 'Yêu vội vàng', type: 1, description: 'Yêu vội vàng', created_at: new Date()},
-			{name: 'Lạc trôi', type: 1, description: 'Lạc trôi', created_at: new Date()},
-			{name: 'Như một thói quen', type: 1, description: 'Như một thói quen', created_at: new Date()},
-			{name: 'Người âm phủ', type: 1, description: 'Người âm phủ', created_at: new Date()}
-		];
+		try {
+			const res = await videoService.list({
+				page_index: 0
+			});
 
-		this.state.list = list;
-		this.state.page.total = list.length;
-		this.setState(this.state);
+			if(res.error === 0) {
+				const list = res.list;
+				this.state.list = res.list;
+				this.state.page.total = list.length;
+				this.setState(this.state);
+			} else {
+				const self = this;
+				this.modalAlert.current.showModal({
+					title: 'Error',
+					content: res.message,
+					callback: function() {
+						if(res.error === 401) {
+							self.props.history.push(window.location.pathname + window.location.search);
+						}
+					}
+				});
+			}
+		} catch (e) {
+			this.modalAlert.showModal({
+				title: 'Error',
+				content: 'Get API list videos error'
+			});
+		}
 	}
 
 	edit(info, index) {

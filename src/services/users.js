@@ -1,8 +1,6 @@
 /**
  * Created by tanmv on 01/08/2018.
  */
-'use strict';
-
 import {Get, Post} from './index';
 
 export const profile = async () => {
@@ -11,7 +9,7 @@ export const profile = async () => {
 };
 
 export const login = async ({email, password, remember}) => {
-	const results = await Post('/api/login', {
+	const results = await Post('/api/user/login', {
 		email, password, remember
 	});
 	return results.data;

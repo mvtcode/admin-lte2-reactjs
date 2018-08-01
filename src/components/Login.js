@@ -2,18 +2,26 @@ import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import {userType} from '../actions';
 import stores from '../stores';
-import {login} from '../services/users';
+import {login, profile} from '../services/users';
 
 import '../assets/css/login.css';
 
 class Login extends Component {
 	constructor(props) {
 		super(props);
+		let redirect = '/';
+		const querystring = window.location.search.replace('?', '');
+		if(querystring) {
+			const params = querystring.split(/&/g).filter(s => s.indexOf('redirect=') === 0);
+			if(params && params.length > 0) redirect = params[0].split('=')[1];
+		}
+
 		this.state = {
 			email: '',
 			password: '',
 			remember: '',
-			error: ''
+			error: '',
+			redirect
 		};
 		this.onSubmit = this.onSubmit.bind(this);
 		this.handleChange = this.handleChange.bind(this);
@@ -40,7 +48,7 @@ class Login extends Component {
 				type: userType.SET_USER,
 				info: res.info
 			});
-			this.props.history.push("/");
+			this.props.history.push(this.state.redirect);
 		}
 	}
 
@@ -97,8 +105,20 @@ class Login extends Component {
 		);
 	}
 
-	componentDidMount() {
-		//
+	async componentDidMount() {
+		try {
+			const res = await profile();
+			if(res.error === 0) {
+				this.state.user = res.info;
+				stores.dispatch({
+					type: userType.SET_USER,
+					info: res.info
+				});
+				this.props.history.push(this.state.redirect);
+			}
+		} catch (e) {
+			console.error('GetProfile', e);
+		}
 	}
 }
 

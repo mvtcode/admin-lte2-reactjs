@@ -8,6 +8,7 @@
 import $ from 'jquery';
 import React, { Component } from "react";
 import Modal from 'react-bootstrap-modal';
+import * as youtube from '../../services/youtube';
 
 const infoInit = {
 	_id: '',

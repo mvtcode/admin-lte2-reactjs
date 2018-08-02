@@ -16,11 +16,12 @@ class Videos extends Component {
 		this.edit = this.edit.bind(this);
 		this.remove = this.remove.bind(this);
 		this.save = this.save.bind(this);
+		this.loadData = this.loadData.bind(this);
 
 		this.state = {
 			page: {
 				total: 0,
-				page_size: 5,
+				page_size: 20,
 				page_index: 1,
 				visiblePage: 5
 			},
@@ -72,7 +73,7 @@ class Videos extends Component {
 													this.state.list.map((_info, index) => {
 														return (
 															<tr key={index}>
-																<td className="text-center">{index + 1}</td>
+																<td className="text-center">{(this.state.page.page_index - 1) * this.state.page.page_size + index + 1}</td>
 																<td>{_info.name}</td>
 																<td>{_info.key}</td>
 																<td>{_info.type}</td>
@@ -91,20 +92,22 @@ class Videos extends Component {
 
 									<div className="row">
 										<div className="col-sm-5">
-											<div className="dataTables_info">Showing 1 to 10 of 57 entries</div>
+											<div style={{display: this.state.list && this.state.list.length > 0? 'block': 'none'}} className="dataTables_info">Showing {(this.state.page.page_index - 1) * this.state.page.page_size + 1} to {(this.state.page.page_index - 1) * this.state.page.page_size + this.state.list.length} of {this.state.page.total} entries</div>
 										</div>
 										<div className="col-sm-7">
-											<Pagination
-												totalItemsCount={this.state.page.total}
-												itemsCountPerPage={this.state.page.page_size}
-												activePage={this.state.page.page_index}
-												pageRangeDisplayed={this.state.page.visiblePage}
-												onChange={this.handlePageChanged}
-												firstPageText={<i className='fa fa-fast-backward'/>}
-												lastPageText={<i className='fa fa-fast-forward'/>}
-												prevPageText={<i className='fa fa-step-backward'/>}
-												nextPageText={<i className='fa fa-step-forward'/>}
-											/>
+											<div style={{display: this.state.page.total > this.state.page.page_size? 'block': 'none'}}>
+												<Pagination style={{display: 'block'}}
+													totalItemsCount={this.state.page.total}
+													itemsCountPerPage={this.state.page.page_size}
+													activePage={this.state.page.page_index}
+													pageRangeDisplayed={this.state.page.visiblePage}
+													onChange={this.handlePageChanged}
+													firstPageText={<i className='fa fa-fast-backward'/>}
+													lastPageText={<i className='fa fa-fast-forward'/>}
+													prevPageText={<i className='fa fa-step-backward'/>}
+													nextPageText={<i className='fa fa-step-forward'/>}
+												/>
+											</div>
 										</div>
 									</div>
 
@@ -130,16 +133,19 @@ class Videos extends Component {
 		);
 	}
 
-	async componentDidMount() {
+	async loadData(page_index) {
 		try {
-			const res = await videoService.list({
-				page_index: 0
-			});
+			const res = await videoService.list({ page_index });
 
 			if(res.error === 0) {
 				const list = res.list;
 				this.state.list = res.list;
 				this.state.page.total = list.length;
+				if(res.paging) {
+					this.state.page.total = res.paging.total;
+					this.state.page.page_size = res.paging.page_size;
+					this.state.page.page_index = res.paging.page_index + 1;
+				}
 				this.setState(this.state);
 			} else {
 				const self = this;
@@ -161,13 +167,16 @@ class Videos extends Component {
 		}
 	}
 
+	async componentDidMount() {
+		await this.loadData(0);
+	}
+
 	showModal(info, index) {
 		this.modal.current.show(info, index);
 	};
 
-	handlePageChanged(newPage) {
-		this.state.page.page_index = newPage;
-		this.setState(this.state);
+	handlePageChanged(page_index) {
+		this.loadData(page_index - 1);
 	}
 
 	async save(info, index) {
@@ -177,7 +186,6 @@ class Videos extends Component {
 				if(res.error === 0) {
 					this.state.list[index] = info;
 					this.setState(this.state);
-					this.setState(this.state);
 					this.modal.current.close();
 				} else {
 					this.modal.current.setMessage(res.message);
@@ -185,8 +193,16 @@ class Videos extends Component {
 			} else {
 				const res = await videoService.add(info);
 				if(res.error === 0) {
-					this.state.list.push(res.info);
-					this.setState(this.state);
+					if(this.state.page.page_index > 1) {
+						await this.loadData(0);
+					} else {
+						this.state.list.unshift(res.info);
+						this.state.page.total++;
+						if(this.state.list.length > this.state.page.page_size) {
+							this.state.list.pop();
+						}
+						this.setState(this.state);
+					}
 					this.modal.current.close();
 				} else {
 					this.modal.current.setMessage(res.message);
@@ -211,7 +227,12 @@ class Videos extends Component {
 					const res = await videoService.remove(info._id);
 					if(res.error === 0) {
 						self.state.list.splice(index, 1);
-						self.setState(self.state);
+						self.state.page.total--;
+						if(self.state.list.length === 0 && this.state.page.page_index > 1) {
+							await self.loadData(this.state.page.page_index - 2);
+						} else {
+							self.setState(self.state);
+						}
 					} else {
 						self.modalAlert.current.showModal({
 							title: 'Error',

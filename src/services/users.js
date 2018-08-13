@@ -4,13 +4,11 @@
 import {Get, Post} from './index';
 
 export const profile = async () => {
-	const results = await Get('/api/user/profile', {});
-	return results.data;
+	return await Get('/api/user/profile', {});
 };
 
 export const login = async ({email, password, remember}) => {
-	const results = await Post('/api/user/login', {
+	return await Post('/api/user/login', {
 		email, password, remember
 	});
-	return results.data;
 };

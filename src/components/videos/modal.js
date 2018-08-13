@@ -17,7 +17,11 @@ const infoInit = {
 	type: 'youtube',
 	key: '',
 	path: '',
-	file: ''
+	file: '',
+	url: '',
+	tags: '',
+	duration: 0,
+	thumb: 'https://placehold.it/220x124?text=no+image'
 };
 
 class VideoModal extends Component {
@@ -35,6 +39,9 @@ class VideoModal extends Component {
 		this.close = this.close.bind(this);
 		this.save = this.save.bind(this);
 		this.handleChange = this.handleChange.bind(this);
+		this.loadYoutubeInfo = this.loadYoutubeInfo.bind(this);
+		this.getDuration = this.getDuration.bind(this);
+		this.getTags = this.getTags.bind(this);
 	}
 
 	show(info, index) {
@@ -65,6 +72,42 @@ class VideoModal extends Component {
 		this.setState(this.state);
 	}
 
+	getDuration(){
+		return youtube.formatSecondsAsTime(this.state.info.duration);
+	}
+
+	getTags() {
+		if(this.state.info.tags)
+			return this.state.info.tags.split(', ');
+		return '';
+	}
+
+	async loadYoutubeInfo() {
+		try {
+			const url = this.state.info.url;
+			const yid = youtube.getId(url);
+			if(yid) {
+				const videoInfo = await youtube.getInfo(yid);
+				if(videoInfo) {
+					let info = this.state.info;
+					info.name = videoInfo.title;
+					info.description = videoInfo.description;
+					info.key = yid;
+					info.tags = videoInfo.tags.join(', ');
+					info.duration = videoInfo.duration;
+					info.thumb = videoInfo.thumbnails.default.url;
+					this.setState(this.state);
+					console.log(this.state);
+				}
+				console.log('load done');
+			} else {
+				console.error('url not valid');
+			}
+		} catch(e) {
+			console.error(e);
+		}
+	}
+
 	render() {
 		return (
 			<React.Fragment>
@@ -81,12 +124,6 @@ class VideoModal extends Component {
 								</div>
 							</div>
 							<div className="form-group">
-								<label className="col-sm-3 control-label">Name:</label>
-								<div className="col-sm-9">
-									<input value={this.state.info.name} onChange={(event) => this.handleChange('name', event)} type="text" className="form-control" placeholder="Video name" required/>
-								</div>
-							</div>
-							<div className="form-group">
 								<label className="col-sm-3 control-label">Video type:</label>
 								<div className="col-sm-9">
 									<select onChange={(event) => this.handleChange('type', event)} className="form-control" style={{fontWeight: 'bold'}}>
@@ -96,9 +133,44 @@ class VideoModal extends Component {
 								</div>
 							</div>
 							<div className="form-group">
+								<label className="col-sm-3 control-label">Url:</label>
+								<div className="col-sm-9">
+									<div className="input-group">
+										<input value={this.state.info.url} onChange={(event) => this.handleChange('url', event)} type="text" className="form-control" placeholder="url" required/>
+										<div className="input-group-btn">
+											<button onClick={this.loadYoutubeInfo} className="btn btn-default" type="button">Load Info</button>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div className="form-group">
+								<label className="col-sm-3 control-label">Thumb:</label>
+								<div className="col-sm-5">
+									<img className="thumb img-thumbnail" alt="Ảnh thumb" src={this.state.info.thumb}/>
+								</div>
+							</div>
+							<div className="form-group">
+								<label className="col-sm-3 control-label">Name:</label>
+								<div className="col-sm-9">
+									<input value={this.state.info.name} onChange={(event) => this.handleChange('name', event)} type="text" className="form-control" placeholder="Video name" required/>
+								</div>
+							</div>
+							<div className="form-group">
 								<label className="col-sm-3 control-label">Youtube id:</label>
 								<div className="col-sm-9">
 									<input value={this.state.info.key} onChange={(event) => this.handleChange('key', event)} type="text" className="form-control" placeholder="Youtube id" required/>
+								</div>
+							</div>
+							<div className="form-group">
+								<label className="col-sm-3 control-label">Duration:</label>
+								<div className="col-sm-9">
+									<input value={this.getDuration()} className="form-control" placeholder="Video duration" disabled="disabled" required/>
+								</div>
+							</div>
+							<div className="form-group">
+								<label className="col-sm-3 control-label">Tags:</label>
+								<div className="col-sm-9">
+									<input value={this.getTags()} type="text" className="form-control" placeholder="Tags" required/>
 								</div>
 							</div>
 							<div className="form-group">

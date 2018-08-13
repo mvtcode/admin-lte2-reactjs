@@ -9,21 +9,17 @@
 import {Get, Post, Put, Delete} from './index';
 
 export const list = async (params) => {
-	const results = await Get('/api/videos', {params});
-	return results.data;
+	return await Get('/api/videos', {params});
 };
 
 export const add = async (info) => {
-	const results = await Post('/api/videos', info);
-	return results.data;
+	return await Post('/api/videos', info);
 };
 
 export const update = async (info) => {
-	const results = await Put(`/api/videos/${info._id}`, info);
-	return results.data;
+	return await Put(`/api/videos/${info._id}`, info);
 };
 
 export const remove = async (id) => {
-	const results = await Delete(`/api/videos/${id}`);
-	return results.data;
+	return await Delete(`/api/videos/${id}`);
 };

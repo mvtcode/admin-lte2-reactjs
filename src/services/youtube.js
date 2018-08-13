@@ -10,7 +10,7 @@ import {Get} from './index';
 
 const key = 'AIzaSyB42PbqbmYBZha_CN5j-3kPOVt8QifUfh8'; // for domain: http://*.hpstar.net
 
-export const getId = async (url) => {
+export const getId = (url) => {
 	let regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
 	let match = url.match(regExp);
 	if(match && match[7].length === 11){
@@ -27,7 +27,9 @@ export const getInfo = async (id) => {
 		part: 'snippet,contentDetails'
 	});
 	if(results) {
-		return results.items[0].snippet;
+		const info = results.items[0].snippet;
+		info.duration = convertISO8601ToSeconds(results.items[0].contentDetails.duration);
+		return info;
 	}
 };
 

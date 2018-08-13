@@ -14,17 +14,21 @@ axios.create({
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 export const Get = async (url, params = {}) => {
-	return await axios.get(url, params);
+	const results = await axios.get(url, {params});
+	return results.data;
 };
 
 export const Post = async (url, params = {}) => {
-	return await axios.post(url, params);
+	const results = await axios.post(url, params);
+	return results.data;
 };
 
 export const Put = async (url, params = {}) => {
-	return await axios.put(url, params);
+	const results = await axios.put(url, params);
+	return results.data;
 };
 
 export const Delete = async (url) => {
-	return await axios.delete(url);
+	const results = await axios.delete(url);
+	return results.data;
 };

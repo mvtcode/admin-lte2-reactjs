@@ -19,7 +19,7 @@ const infoInit = {
 	path: '',
 	file: '',
 	url: '',
-	tags: '',
+	tags: [],
 	duration: 0,
 	thumb: 'https://placehold.it/220x124?text=no+image'
 };
@@ -45,7 +45,12 @@ class VideoModal extends Component {
 	}
 
 	show(info, index) {
-		this.setState({isShow: true, index, message: '', info: info? info: Object.assign({}, infoInit) });
+		this.setState({
+			isShow: true,
+			index,
+			message: '',
+			info: info? info: Object.assign({}, infoInit)
+		});
 		setTimeout(() => {
 			$('.modal').css({display: 'block', 'padding-right': '15px'});
 		}, 100);
@@ -68,7 +73,11 @@ class VideoModal extends Component {
 	}
 
 	handleChange(key, event){
-		this.state.info[key] = event.target.value;
+		if(key === 'tags') {
+			this.state.info[key] = event.target.value.split(/,/g);
+		} else {
+			this.state.info[key] = event.target.value;
+		}
 		this.setState(this.state);
 	}
 
@@ -77,8 +86,8 @@ class VideoModal extends Component {
 	}
 
 	getTags() {
-		if(this.state.info.tags)
-			return this.state.info.tags.split(', ');
+		if(this.state.info.tags && Array.isArray(this.state.info.tags) && this.state.info.tags.length > 0)
+			return this.state.info.tags.join(', ');
 		return '';
 	}
 
@@ -93,7 +102,7 @@ class VideoModal extends Component {
 					info.name = videoInfo.title;
 					info.description = videoInfo.description;
 					info.key = yid;
-					info.tags = videoInfo.tags.join(', ');
+					info.tags = videoInfo.tags;
 					info.duration = videoInfo.duration;
 					info.thumb = videoInfo.thumbnails.default.url;
 					this.setState(this.state);

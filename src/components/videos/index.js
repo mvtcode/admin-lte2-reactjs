@@ -60,12 +60,13 @@ class Videos extends Component {
 											<table className="table table-bordered table-striped">
 												<thead>
 												<tr>
-													<th className="text-center">No.</th>
-													<th>Name</th>
-													<th>Type</th>
-													<th>key</th>
-													<th>Description</th>
-													<th className="text-center">Action</th>
+													<th className="text-center" style={{width: '4%'}}>No.</th>
+													<th style={{width: '10%'}}>Thumb</th>
+													<th style={{width: '20%'}}>Name</th>
+													<th style={{width: '5%'}}>Type</th>
+													<th style={{width: '5%'}}>key</th>
+													<th style={{width: '46%'}}>Description</th>
+													<th style={{width: '10%'}} className="text-center">Action</th>
 												</tr>
 												</thead>
 												<tbody>
@@ -74,10 +75,11 @@ class Videos extends Component {
 														return (
 															<tr key={index}>
 																<td className="text-center">{(this.state.page.page_index - 1) * this.state.page.page_size + index + 1}</td>
+																<td><img src={_info.thumb ? _info.thumb: 'https://placehold.it/220x124?text=no+image'}/></td>
 																<td>{_info.name}</td>
-																<td>{_info.key}</td>
 																<td>{_info.type}</td>
-																<td>{_info.description}</td>
+																<td>{_info.key}</td>
+																<td>{_info.description.left(300)}</td>
 																<td className="text-center">
 																	<a href="javascript:void(0)" onClick={() => this.edit(_info, index)}>Edit</a> | <a href="javascript:void(0)" onClick={() => this.remove(_info, index)}>Delete</a>
 																</td>

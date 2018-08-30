@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Pagination from "react-js-pagination";
 import {pageType} from "../../actions";
 import stores from '../../stores';
+import Player from './player';
 import Modal from './modal';
 import Confirm from '../commons/Confirm';
 import Alert from '../commons/Alert';
@@ -17,6 +18,7 @@ class Videos extends Component {
 		this.remove = this.remove.bind(this);
 		this.save = this.save.bind(this);
 		this.loadData = this.loadData.bind(this);
+		this.play = this.play.bind(this);
 
 		this.state = {
 			page: {
@@ -29,6 +31,7 @@ class Videos extends Component {
 		};
 
 		this.modal = React.createRef();
+		this.modalPlayer = React.createRef();
 		this.modalConfirm = React.createRef();
 		this.modalAlert = React.createRef();
 	}
@@ -81,7 +84,7 @@ class Videos extends Component {
 																<td>{_info.key}</td>
 																<td>{_info.description.left(300)}</td>
 																<td className="text-center">
-																	<a href="javascript:void(0)" onClick={() => this.edit(_info, index)}>Edit</a> | <a href="javascript:void(0)" onClick={() => this.remove(_info, index)}>Delete</a>
+																	<a href="javascript:void(0)" onClick={() => this.play(_info, index)}>Play</a> | <a href="javascript:void(0)" onClick={() => this.edit(_info, index)}>Edit</a> | <a href="javascript:void(0)" onClick={() => this.remove(_info, index)}>Delete</a>
 																</td>
 															</tr>
 														);
@@ -130,6 +133,7 @@ class Videos extends Component {
 
 				<Modal ref={this.modal} onSave={this.save} />
 				<Confirm ref={this.modalConfirm}/>
+				<Player ref={this.modalPlayer}/>
 				<Alert ref={this.modalAlert}/>
 			</React.Fragment>
 		);
@@ -214,6 +218,10 @@ class Videos extends Component {
 			console.error('Save', e);
 		}
 	};
+
+	play(info, index) {
+		this.modalPlayer.current.show(info.key);
+	}
 
 	edit(info, index) {
 		this.showModal(info, index);

@@ -106,9 +106,7 @@ class VideoModal extends Component {
 					info.duration = videoInfo.duration;
 					info.thumb = videoInfo.thumbnails.default.url;
 					this.setState(this.state);
-					console.log(this.state);
 				}
-				console.log('load done');
 			} else {
 				console.error('url not valid');
 			}
